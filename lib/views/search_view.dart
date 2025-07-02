@@ -1,34 +1,39 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:weather_app/cubits/get_weather_cubit/get_waether_cubit.dart';
+import 'package:weather_app/utils/search_city_helper.dart';
 
 class SearchView extends StatelessWidget {
-  const SearchView({super.key});
+  SearchView({super.key});
+
+  final TextEditingController controller = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Search City'),
+        title: const Text('Search City'),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Center(
           child: TextField(
-            onSubmitted: (value) async {
-              var getWeatherCubit = BlocProvider.of<GetWaetherCubit>(context);
-              getWeatherCubit.getWeather(cityName: value);
-              Navigator.pop(context);
+            controller: controller,
+            onSubmitted: (value) {
+              searchCity(context, value);
             },
             decoration: InputDecoration(
-              border: OutlineInputBorder(
+              border: const OutlineInputBorder(
                 borderSide: BorderSide(color: Colors.blue, width: 2),
               ),
               hintText: 'Enter city name',
-              suffixIcon: Icon(Icons.search),
               labelText: 'Search',
               contentPadding:
-                  EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+                  const EdgeInsets.symmetric(vertical: 32, horizontal: 12),
+              suffixIcon: IconButton(
+                icon: const Icon(Icons.search),
+                onPressed: () {
+                  searchCity(context, controller.text);
+                },
+              ),
             ),
           ),
         ),
